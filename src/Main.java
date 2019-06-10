@@ -1,3 +1,4 @@
+import com.sun.prism.paint.Color;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -5,9 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -21,6 +21,7 @@ public class Main extends Application{
     static GridPane gridPane;
     static TextField[][] textFields;
     static String fileName = "save.txt";
+    static final double BORDER_RADIUS = 4;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -35,12 +36,23 @@ public class Main extends Application{
             gridPane = new GridPane();
             gridPane.setPrefWidth(250);
             gridPane.setPrefHeight(250);
+            GridPane[][] gridPanes = new GridPane[3][3];
+            for(int i = 0; i < gridPanes.length; i++){
+                for(int j = 0; j < gridPanes.length; j++){
+                    gridPanes[i][j] = new GridPane();
+                    gridPanes[i][j].setPrefWidth(gridPane.getPrefWidth());
+                    gridPanes[i][j].setPrefHeight(gridPane.getPrefHeight());
+                    gridPanes[i][j].setStyle("-fx-font: 12 arial; -fx-base: #fafafa; -fx-grid-lines-visible: true");
+                    gridPane.add(gridPanes[i][j], i, j);
+                }
+            }
             for(int i = 0; i < textFields.length; i++){
                 for (int j = 0; j < textFields.length; j++){
                     textFields[i][j].setPrefWidth(gridPane.getPrefWidth());
                     textFields[i][j].setPrefHeight(gridPane.getPrefHeight());
                     textFields[i][j].setAlignment(Pos.CENTER);
-                    gridPane.add(textFields[i][j], j, i);
+
+                    gridPanes[i/3][j/3].add(textFields[i][j], j%3, i%3);
                 }
             }
 
